@@ -2,6 +2,8 @@
 from rest_framework import filters
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
 
@@ -20,6 +22,13 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name', 'email', 'bio', 'web', 'full_name',)
 
+
+class CurrentUserView(APIView):
+    """get information of current user"""
+
+    def get(self, request):
+        serializer = serializers.UserProfileSerializer(request.user)
+        return Response(serializer.data)
 
 # class LoginViewSet(viewsets.ViewSet):
 #     """Checks email and password and returns an auth token."""
